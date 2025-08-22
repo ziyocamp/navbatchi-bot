@@ -10,6 +10,7 @@ from telegram.ext import CallbackContext
 from database import (
     add_user,
     get_dities_dict,
+    add_duty,
 )
 
 
@@ -38,7 +39,7 @@ def start(update: Update, context: CallbackContext):
     )
 
 
-def select_duty_day(update: Update, context: CallbackContext):
+def send_available_days(update: Update, context: CallbackContext):
     inline_keyboard = []
 
     duties = get_dities_dict()
@@ -53,11 +54,26 @@ def select_duty_day(update: Update, context: CallbackContext):
             )
         today += datetime.timedelta(days=1)
 
-    update.message.reply_text(
-        "Navbatchilik kunini tanlang:",
-        reply_markup=InlineKeyboardMarkup(
-            inline_keyboard=inline_keyboard
+    if inline_keyboard:
+        update.message.reply_text(
+            "Navbatchilik kunini tanlang:",
+            reply_markup=InlineKeyboardMarkup(
+                inline_keyboard=inline_keyboard
+            )
         )
+    else:
+        update.message.reply_text("Bu xafta hamma navbatchilik kuni tablangan.")
+
+
+def select_duty_day(update: Update, context: CallbackContext):
+    user = update.effective_user
+
+    _, day = update.callback_query.data.split(":")
+
+    add_duty(user.id, day)
+
+    update.callback_query.message.reply_text(
+        f"Siz {day} kuni navbatchi bo'ldingiz."
     )
 
 
