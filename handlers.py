@@ -11,6 +11,7 @@ from database import (
     add_user,
     get_dities_dict,
     add_duty,
+    get_user,
 )
 
 
@@ -79,3 +80,12 @@ def select_duty_day(update: Update, context: CallbackContext):
 
 def send_todays_duty(update: Update, context: CallbackContext):
     today = str(datetime.date.today())
+
+    duties = get_dities_dict()
+
+    duty_tg_id = duties.get(today)
+    if duty_tg_id:
+        user = get_user(duty_tg_id)
+        update.message.reply_text(f"Bugungi navbatchi: {user['first_name']}")
+    else:
+        update.message.reply_text("Bugun navbatchi yo'q")

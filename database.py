@@ -39,3 +39,14 @@ def get_dities_dict():
             data = {"users": {}, "duties": {}}
 
     return data['duties']
+
+
+def get_user(tg_id):
+    with open('data.json') as jsonfile:
+        try:
+            data = json.load(jsonfile)
+        except:
+            data = {"users": {}, "duties": {}}
+
+    return data['users'].get(str(tg_id))
+
