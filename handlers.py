@@ -1,13 +1,15 @@
-from datetime import date
+import datetime
 
 from telegram import (
     Update, 
     ReplyKeyboardMarkup, KeyboardButton,
+    InlineKeyboardMarkup, InlineKeyboardButton,
 )
 from telegram.ext import CallbackContext
 
 from database import (
     add_user,
+    get_dities_dict,
 )
 
 
@@ -36,5 +38,28 @@ def start(update: Update, context: CallbackContext):
     )
 
 
+def select_duty_day(update: Update, context: CallbackContext):
+    inline_keyboard = []
+
+    duties = get_dities_dict()
+
+    today = datetime.date.today()
+    for _ in range(7):
+        if str(today) not in duties:
+            inline_keyboard.append(
+                [
+                    InlineKeyboardButton(str(today), callback_data=f"select_day:{str(today)}")
+                ]
+            )
+        today += datetime.timedelta(days=1)
+
+    update.message.reply_text(
+        "Navbatchilik kunini tanlang:",
+        reply_markup=InlineKeyboardMarkup(
+            inline_keyboard=inline_keyboard
+        )
+    )
+
+
 def send_todays_duty(update: Update, context: CallbackContext):
-    today = str(date.today())
+    today = str(datetime.date.today())

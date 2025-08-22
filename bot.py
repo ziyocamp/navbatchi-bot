@@ -7,6 +7,7 @@ from telegram.ext import (
 from handlers import (
     start,
     send_todays_duty,
+    select_duty_day,
 )
 
 
@@ -20,6 +21,7 @@ def main() -> None:
 
     # add message handler
     dispatcher.add_handler(MessageHandler(Filters.text("Bugungi navbatchi"), send_todays_duty))
+    dispatcher.add_handler(MessageHandler(Filters.text("Navbatchilik uchun kunni tanlash"), select_duty_day))
 
     updater.start_polling()
     updater.idle()
