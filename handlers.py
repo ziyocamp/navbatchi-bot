@@ -89,3 +89,23 @@ def send_todays_duty(update: Update, context: CallbackContext):
         update.message.reply_text(f"Bugungi navbatchi: {user['first_name']}")
     else:
         update.message.reply_text("Bugun navbatchi yo'q")
+
+
+def send_weekly_duties(update: Update, context: CallbackContext):
+    duties = get_dities_dict()       
+    today = datetime.date.today()    
+    text = "📅 Xaftalik navbatchilar ro'yxati:\n\n"
+
+    for i in range(7):  
+        day = str(today + datetime.timedelta(days=i))
+        duty_tg_id = duties.get(day)
+
+        if duty_tg_id:  
+            user = get_user(duty_tg_id)
+            text += f"{day} → {user['first_name']}\n"
+        else:  
+            text += f"{day} → ❌ Navbatchi belgilanmagan\n"
+
+    update.message.reply_text(text)
+
+
