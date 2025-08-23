@@ -19,15 +19,15 @@ def main() -> None:
 
     dispatcher = updater.dispatcher
 
-    # add command handler
+
     dispatcher.add_handler(CommandHandler('start', start))
 
-    # add message handler
+    
     dispatcher.add_handler(MessageHandler(Filters.text("Bugungi navbatchi"), send_todays_duty))
     dispatcher.add_handler(MessageHandler(Filters.text("Navbatchilik uchun kunni tanlash"), send_available_days))
     dispatcher.add_handler(MessageHandler(Filters.text("Xaftalik navbatchilar ro'yxati"),send_weekly_duties))
 
-    # add callbackquery handler
+    
     dispatcher.add_handler(CallbackQueryHandler(select_duty_day, pattern='select_day:'))
 
     updater.start_polling()
